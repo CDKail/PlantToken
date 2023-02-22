@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plant合约交互</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script> -->
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+  <!-- <script src="./abi.js"></script> -->
+  <link rel="shortcut icon"
+    href="data:image/png;base64,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" />
+
+  <style>
+    .ipt {
+      /* border: 1px; */
+      width: 350px;
+    }
+
+    button {
+      height: 30px;
+      margin-left: 10px;
+    }
+
+    .title {
+      background: #24b8d9;
+      font-size: 30px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .label {
+      width: 200px;
+    }
+
+    .label2 {
+      width: 150px;
+      text-align: right;
+      margin-right: 20px;
+    }
+
+
+
+    .flex {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .scroll-view {
+      height: 200px;
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <button @click="connet">连接小狐狸钱包</button>
+    <div>{{bolckType}}</div>
+    <div>当前账号{{ account }}</div>
+    <div>合约地址 : <span style="color:rgb(208, 11, 162);font-weight: 600;">{{contractAddr}}</span></div>
+    <div>名称 : <span style="color:rgb(208, 11, 162);font-weight: 600;">{{name}}</span> </div>
+    <div>总量 : {{totalSupply}}/ <span
+        style="color:rgb(208, 11, 162);font-weight: 600;">{{changeEther(totalSupply)}}个</span></div>
+    <div>精度 : {{decimals}}</div>
+    <div><span style="color:rgb(255, 0, 0);font-weight: 600;">plant/usdt : </span><span
+        style="color:rgb(208, 11, 162);font-weight: 600;">{{usdtLpAddr}}</span></div>
+
+
+    <!-- <div class="title">精度换算</div>
+    金额: <input type="number" v-model="amount">
+    <div>换算后: {{amountComputed}} <button @click="copy(amountComputed)">复制</button></div> -->
+
+
+    <div class="title">所有者权限</div>
+    <div>所有者账号: <span style="color:rgb(255, 0, 0);font-weight: 600;">{{allAccount}}</span> <button
+        @click="contractControl(0)">放弃所有权限</button> </div>
+    <div class="flex">
+      <form action="" method="get">
+        <label><input name="Fruit" type="radio" v-model="isOpen" value="true" />开启 </label>
+        <label><input name="Fruit" type="radio" v-model="isOpen" value="false" />关闭 </label>
+      </form><button @click="contractControl(1)">设置交易状态</button>
+    </div>
+    <div class="flex">
+      <input class="ipt" type="text" placeholder="黑名单地址" v-model="blackAddress">
+      <form action="" method="get">
+        <label><input name="Fruit" type="radio" v-model="isBlack" value="true" />开启 </label>
+        <label><input name="Fruit" type="radio" v-model="isBlack" value="false" />关闭 </label>
+      </form>
+      <button @click="contractControl(2)">设置黑名单</button>
+      <button @click="searchBlack">查询</button>
+    </div>
+
+
+    <div class="title">营收账号权限</div>
+    <div class="flex">
+      营收账号:
+      <input class="ipt" type="text" placeholder="用户地址" v-model="fundAddress"><button
+        @click="contractControl(3)">设置营收账号</button>
+    </div>
+    <div class="flex">
+      <div>
+        <div class="flex">
+          <div class="label">转账手续费:{{oldTransferFee}}</div><input type="text" placeholder="转账手续费" v-model="transferFee"
+            @input="transferInput">{{transferFeeRate}}%
+        </div>
+        <div class="flex">
+          <div class="label">LP手续费:{{oldLPFee}}</div><input type="text" placeholder="LP手续费" v-model="LPFee"
+            @input="LPFeeInput">
+          {{LPFeeRate}}%
+        </div>
+      </div>
+      <button @click="contractControl(4)">设置手续费</button>
+    </div>
+    <div class="flex">
+      <div class="label">设置手续费白名单</div>
+      <input class="ipt" type="text" placeholder="用户地址" v-model="feeWhiteAddr">
+      <form action="" method="get">
+        <label><input name="Fruit" type="radio" v-model="isFeeWhiteAddr" value="true" />是 </label>
+        <label><input name="Fruit" type="radio" v-model="isFeeWhiteAddr" value="false" />否 </label>
+      </form>
+      <button @click="contractControl(5)">设置</button>
+      <button @click="searchfeeWhiteAddr">查询</button>
+    </div>
+    <div class="flex">
+      <div class="label">设置股东账户</div>
+      <input class="ipt" type="text" placeholder="用户地址" v-model="boardAddr">
+      <form action="" method="get">
+        <label><input name="Fruit" type="radio" v-model="isBoardAddr" value="true" />是 </label>
+        <label><input name="Fruit" type="radio" v-model="isBoardAddr" value="false" />否 </label>
+      </form>
+      <button @click="contractControl(6)">设置</button>
+      <button @click="searchboardAddr">查询</button>
+    </div>
+    <div class="flex">
+      <div class="label">
+        设置LP分红黑名单
+        <div>(不分红用户地址)</div>
+      </div>
+      <input class="ipt" type="text" placeholder="用户地址" v-model="LPblackAddr">
+      <form action="" method="get">
+        <label><input name="Fruit" type="radio" v-model="isLPblackAddr" value="true" />是 </label>
+        <label><input name="Fruit" type="radio" v-model="isLPblackAddr" value="false" />否 </label>
+      </form>
+      <button @click="contractControl(7)">设置</button>
+      <button @click="searchLPblackAddr">查询</button>
+    </div>
+    <div class="flex">
+      <div class="label">设置用户锁仓数量</div>
+      <div>
+        <div><input class="ipt" type="text" placeholder="LP地址" v-model="lockLPAddr"></div>
+        <div><input class="ipt" type="text" placeholder="用户地址" v-model="lockAddr"> </div>
+      </div>
+      <input type="text" placeholder="数量" v-model="lockNum"> {{lockNumComputed}}个
+      <button @click="contractControl(8)">设置</button>
+      <button @click="searchNum">查询</button>
+    </div>
+    <div class="flex">
+      <div class="label">设置LP地址</div>
+      <input class="ipt" type="text" placeholder="LP地址" v-model="LPAddress">
+      <form action="" method="get">
+        <label><input name="Fruit" type="radio" v-model="isLPAddress" value="true" />是 </label>
+        <label><input name="Fruit" type="radio" v-model="isLPAddress" value="false" />否 </label>
+      </form>
+      <button @click="contractControl(9)">设置</button>
+      <button @click="searchLPInfo">查询lp信息</button>
+
+    </div>
+
+    <div v-if="LPInfo.length" style="border:1px solid red">
+      <div class="flex">
+        <div class="label2">LP地址: </div>
+        {{LPInfo[0]}}
+      </div>
+      <div class="flex">
+        <div class="label2">是否加入: </div>
+        {{LPInfo[1]}}
+      </div>
+      <div class="flex">
+        <div class="label2">当前分红排序: </div>
+        {{LPInfo[3]}}
+      </div>
+      <div class="flex">
+        <div class="label2">上一次分红总人数: </div>
+        {{LPInfo[4]}}
+      </div>
+      <div class="flex">
+        <div class="label2">手续费最近累计金额: </div>
+        {{changeEther(LPInfo[5])}}
+      </div>
+      <div class="flex">
+        <div class="label2">正在分红金额: </div>
+        {{changeEther(LPInfo[6])}}
+      </div>
+      <div class="flex">
+        <div class="label2">上次分红时间: </div>
+        {{formatDate(LPInfo[7])}}
+      </div>
+      <div class="flex">
+        <div class="label2">下次分红时间: </div>
+        {{calcNextTime}}
+      </div>
+      <div class="flex">
+        <div class="label2">成员列表({{LPInfo[2].length}}): </div>
+        <div class="scroll-view">
+          <div v-for="item in LPInfo[2]" :key="item">{{item}}</div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="flex">
+      <div class="label">提取LP的手续费到营收账号 </div>
+      <input class="ipt" type="text" placeholder="LP地址" v-model="depositFeeAddr">
+      <button @click="contractControl(10)">提取</button>
+    </div>
+
+    <div>
+      <div class="label ">设置分红条件</div>
+      <div class="flex">
+        <div style="width:200px">股东最小持有数量: </div>
+        <input type="text" placeholder="股东最小持有数量" v-model="oldHolderMin">
+        {{changeEther(oldHolderMin)}}个
+      </div>
+      <div class="flex">
+        <div style="width:200px">普通用户最小持有数量: </div>
+        <input type="text" placeholder="普通用户最小持有数量" v-model="oldOrdinaryMin">
+        {{changeEther(oldOrdinaryMin)}}个
+      </div>
+      <div class="flex">
+        <div style="width:200px">最少开始分红:</div>
+        <input type="text" placeholder="最少开始分红" v-model="oldLimitMin">
+        {{changeEther(oldLimitMin)}}个
+      </div>
+      <div class="flex">
+        <div style="width:200px">分红gas上限:</div>
+        <input type="text" placeholder="分红gas上限" v-model="oldLimitGas">
+      </div>
+      <div class="flex">
+        <div style="width:200px">分红周期(秒):</div>
+        <input type="text" placeholder="分红周期(秒)" v-model="oldMinTime">
+      </div>
+      <div class="flex">
+        <div style="width:200px">公司分红占比(秒):</div>
+        <input type="text" placeholder="公司分红占比" v-model="oldCompRete">
+        {{oldCompRete/10}}%
+      </div>
+      <button @click="contractControl(11)">设置</button>
+    </div>
+
+
+
+
+
+
+    <video autoplay id='video'></video>
+    <canvas id="output"></canvas>
+
+  </div>
+  <script>
+    const ABI = [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "_LPFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "_blackList", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "_boardMembers", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "_feeWhiteList", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "_lpBlackList", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_tTotal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_tranferFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "pairAddr", "type": "address" }], "name": "depositFee", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getFundInfo", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "pairAddr", "type": "address" }], "name": "nextFundTime", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "addr", "type": "address" }, { "internalType": "bool", "name": "enable", "type": "bool" }], "name": "setBlackAddress", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "addr", "type": "address" }, { "internalType": "bool", "name": "enable", "type": "bool" }], "name": "setBoardMembers", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tranferFee", "type": "uint256" }, { "internalType": "uint256", "name": "lPFee", "type": "uint256" }], "name": "setFee", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "addr", "type": "address" }, { "internalType": "bool", "name": "enable", "type": "bool" }], "name": "setFeeWhiteList", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_minHolderNum", "type": "uint256" }, { "internalType": "uint256", "name": "_minOrdinaryNum", "type": "uint256" }, { "internalType": "uint256", "name": "_limitFeeMaxGas", "type": "uint256" }, { "internalType": "uint256", "name": "_limitFeeMin", "type": "uint256" }, { "internalType": "uint256", "name": "_minTimeSec", "type": "uint256" }, { "internalType": "uint256", "name": "_compRete", "type": "uint256" }], "name": "setHolderCondition", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "addr", "type": "address" }, { "internalType": "bool", "name": "enable", "type": "bool" }], "name": "setLPBlackList", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "_open", "type": "bool" }], "name": "setOpenStatus", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "pairAddr", "type": "address" }, { "internalType": "address", "name": "addr", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "setRecordBoardRate", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "pairAddr", "type": "address" }, { "internalType": "bool", "name": "enable", "type": "bool" }], "name": "setSwapPairList", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "addr", "type": "address" }], "name": "setfundAddress", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "pairAddr", "type": "address" }], "name": "showPairInfo", "outputs": [{ "internalType": "address", "name": "_pair", "type": "address" }, { "internalType": "bool", "name": "_enable", "type": "bool" }, { "internalType": "address[]", "name": "_member", "type": "address[]" }, { "internalType": "uint256", "name": "_currentIndex", "type": "uint256" }, { "internalType": "uint256", "name": "_lastMembers", "type": "uint256" }, { "internalType": "uint256", "name": "_totalAmount", "type": "uint256" }, { "internalType": "uint256", "name": "_lastTotalAmount", "type": "uint256" }, { "internalType": "uint256", "name": "_lastBlockNumber", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "pairAddr", "type": "address" }, { "internalType": "address", "name": "addr", "type": "address" }], "name": "showRecordBoardRate", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "stateMutability": "payable", "type": "receive" }]
+
+
+
+    const LPABI = [{ "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "sender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount0", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "amount1", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }], "name": "Burn", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "sender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount0", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "amount1", "type": "uint256" }], "name": "Mint", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "sender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount0In", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "amount1In", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "amount0Out", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "amount1Out", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }], "name": "Swap", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint112", "name": "reserve0", "type": "uint112" }, { "indexed": false, "internalType": "uint112", "name": "reserve1", "type": "uint112" }], "name": "Sync", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "constant": true, "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "MINIMUM_LIQUIDITY", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "PERMIT_TYPEHASH", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "internalType": "address", "name": "", "type": "address" }, { "internalType": "address", "name": "", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "to", "type": "address" }], "name": "burn", "outputs": [{ "internalType": "uint256", "name": "amount0", "type": "uint256" }, { "internalType": "uint256", "name": "amount1", "type": "uint256" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "factory", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getReserves", "outputs": [{ "internalType": "uint112", "name": "_reserve0", "type": "uint112" }, { "internalType": "uint112", "name": "_reserve1", "type": "uint112" }, { "internalType": "uint32", "name": "_blockTimestampLast", "type": "uint32" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "_token0", "type": "address" }, { "internalType": "address", "name": "_token1", "type": "address" }], "name": "initialize", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "kLast", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "to", "type": "address" }], "name": "mint", "outputs": [{ "internalType": "uint256", "name": "liquidity", "type": "uint256" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "nonces", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "permit", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "price0CumulativeLast", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "price1CumulativeLast", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "to", "type": "address" }], "name": "skim", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "uint256", "name": "amount0Out", "type": "uint256" }, { "internalType": "uint256", "name": "amount1Out", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "bytes", "name": "data", "type": "bytes" }], "name": "swap", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "sync", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "token0", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "token1", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }]
+
+
+    const swapABI = [{ "inputs": [{ "internalType": "address", "name": "_factory", "type": "address" }, { "internalType": "address", "name": "_WETH", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "WETH", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "tokenA", "type": "address" }, { "internalType": "address", "name": "tokenB", "type": "address" }, { "internalType": "uint256", "name": "amountADesired", "type": "uint256" }, { "internalType": "uint256", "name": "amountBDesired", "type": "uint256" }, { "internalType": "uint256", "name": "amountAMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountBMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "addLiquidity", "outputs": [{ "internalType": "uint256", "name": "amountA", "type": "uint256" }, { "internalType": "uint256", "name": "amountB", "type": "uint256" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }, { "internalType": "uint256", "name": "amountTokenDesired", "type": "uint256" }, { "internalType": "uint256", "name": "amountTokenMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountETHMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "addLiquidityETH", "outputs": [{ "internalType": "uint256", "name": "amountToken", "type": "uint256" }, { "internalType": "uint256", "name": "amountETH", "type": "uint256" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }], "stateMutability": "payable", "type": "function" }, { "inputs": [], "name": "factory", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountOut", "type": "uint256" }, { "internalType": "uint256", "name": "reserveIn", "type": "uint256" }, { "internalType": "uint256", "name": "reserveOut", "type": "uint256" }], "name": "getAmountIn", "outputs": [{ "internalType": "uint256", "name": "amountIn", "type": "uint256" }], "stateMutability": "pure", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountIn", "type": "uint256" }, { "internalType": "uint256", "name": "reserveIn", "type": "uint256" }, { "internalType": "uint256", "name": "reserveOut", "type": "uint256" }], "name": "getAmountOut", "outputs": [{ "internalType": "uint256", "name": "amountOut", "type": "uint256" }], "stateMutability": "pure", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountOut", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }], "name": "getAmountsIn", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountIn", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }], "name": "getAmountsOut", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountA", "type": "uint256" }, { "internalType": "uint256", "name": "reserveA", "type": "uint256" }, { "internalType": "uint256", "name": "reserveB", "type": "uint256" }], "name": "quote", "outputs": [{ "internalType": "uint256", "name": "amountB", "type": "uint256" }], "stateMutability": "pure", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "tokenA", "type": "address" }, { "internalType": "address", "name": "tokenB", "type": "address" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }, { "internalType": "uint256", "name": "amountAMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountBMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "removeLiquidity", "outputs": [{ "internalType": "uint256", "name": "amountA", "type": "uint256" }, { "internalType": "uint256", "name": "amountB", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }, { "internalType": "uint256", "name": "amountTokenMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountETHMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "removeLiquidityETH", "outputs": [{ "internalType": "uint256", "name": "amountToken", "type": "uint256" }, { "internalType": "uint256", "name": "amountETH", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }, { "internalType": "uint256", "name": "amountTokenMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountETHMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "removeLiquidityETHSupportingFeeOnTransferTokens", "outputs": [{ "internalType": "uint256", "name": "amountETH", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }, { "internalType": "uint256", "name": "amountTokenMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountETHMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "bool", "name": "approveMax", "type": "bool" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "removeLiquidityETHWithPermit", "outputs": [{ "internalType": "uint256", "name": "amountToken", "type": "uint256" }, { "internalType": "uint256", "name": "amountETH", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }, { "internalType": "uint256", "name": "amountTokenMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountETHMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "bool", "name": "approveMax", "type": "bool" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens", "outputs": [{ "internalType": "uint256", "name": "amountETH", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "tokenA", "type": "address" }, { "internalType": "address", "name": "tokenB", "type": "address" }, { "internalType": "uint256", "name": "liquidity", "type": "uint256" }, { "internalType": "uint256", "name": "amountAMin", "type": "uint256" }, { "internalType": "uint256", "name": "amountBMin", "type": "uint256" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "bool", "name": "approveMax", "type": "bool" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "removeLiquidityWithPermit", "outputs": [{ "internalType": "uint256", "name": "amountA", "type": "uint256" }, { "internalType": "uint256", "name": "amountB", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountOut", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapETHForExactTokens", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountOutMin", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapExactETHForTokens", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountOutMin", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapExactETHForTokensSupportingFeeOnTransferTokens", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountIn", "type": "uint256" }, { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapExactTokensForETH", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountIn", "type": "uint256" }, { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapExactTokensForETHSupportingFeeOnTransferTokens", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountIn", "type": "uint256" }, { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapExactTokensForTokens", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountIn", "type": "uint256" }, { "internalType": "uint256", "name": "amountOutMin", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapExactTokensForTokensSupportingFeeOnTransferTokens", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountOut", "type": "uint256" }, { "internalType": "uint256", "name": "amountInMax", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapTokensForExactETH", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amountOut", "type": "uint256" }, { "internalType": "uint256", "name": "amountInMax", "type": "uint256" }, { "internalType": "address[]", "name": "path", "type": "address[]" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "swapTokensForExactTokens", "outputs": [{ "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }], "stateMutability": "nonpayable", "type": "function" }, { "stateMutability": "payable", "type": "receive" }]
+  </script>
+  <script>
+    function format(time) {
+      return time < 10 ? "0" + time : time;
+    }
+    var app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          timer: null,
+          nextTime: 0,
+
+          amount: "",
+
+          chainId: "",
+          currentAccount: [],
+          swapABI: [],
+          ABI: [],
+          LPABI: [],
+          // 主网
+          contractAddr: "0x76c28a047AaE73218db0Bc4df7E6C859eD7e0102",
+          usdtLpAddr: "0x748da3D5EE4FE250569AFfa911E0eD063794cc54",
+          // 测网
+          // contractAddr: "0x26E4a7Eb379E8c60a2c159b92e7B6D5fFe9b5743",
+
+          name: "",
+          totalSupply: "",
+          decimals: "",
+
+          contractObject: null,
+          allAccount: "",
+
+          isOpen: "true",
+
+          isBlack: "true",
+          blackAddress: "",
+
+          fundAddress: "",
+
+          transferFee: "",
+          LPFee: "",
+          oldLPFee: "",
+          oldTransferFee: "",
+
+          feeWhiteAddr: "",
+          isFeeWhiteAddr: "true",
+
+          boardAddr: "",
+          isBoardAddr: "true",
+
+          LPblackAddr: "",
+          isLPblackAddr: "true",
+
+          lockNum: "",
+          lockLPAddr: "",
+          lockAddr: "",
+
+          LPAddress: "",
+          isLPAddress: "true",
+
+          depositFeeAddr: "",
+
+          oldHolderMin: "",
+          oldOrdinaryMin: "",
+          oldLimitMin: "",
+          oldLimitGas: "",
+          oldMinTime: "",
+          oldCompRete: "",
+
+          LPInfo: [],
+
+          provider: null,
+          signer: null
+        }
+      },
+
+      computed: {
+
+        account() {
+          if (this.currentAccount.length) return this.currentAccount[0]
+          return "未连接小狐狸钱包"
+        },
+        bolckType() {
+          switch (this.chainId) {
+            case '56':
+              return "BSC主网 chainID:56"
+              break;
+            case '97':
+              return "BSC测试网 chainID:97"
+              break;
+            default:
+              return "";
+              break;
+          }
+        },
+        transferFeeRate() {
+          return Number(this.transferFee) / 10
+        },
+        LPFeeRate() {
+          return Number(this.LPFee) / 10
+        },
+        amountComputed() {
+          // return ethers.utils.formatEther(this.amount)
+          if (this.amount == "") return "0"
+          return ethers.utils.parseUnits(this.amount, 18)
+        },
+        lockNumComputed() {
+          if (this.lockNum == "") return "0"
+          return ethers.utils.formatEther(this.lockNum)
+          // return ethers.utils.parseUnits(this.lockNum, 18)
+        },
+        changeEther() {
+          return function (str) {
+            if (!str) return ""
+            return ethers.utils.formatEther(String(str))
+          }
+        },
+        calcNextTime() {
+          if (this.nextTime == 0) return "准备触发"
+
+          var d = parseInt(this.nextTime / 60 / 60 / 24);
+          var h = parseInt(this.nextTime / 60 / 60 % 24);
+          var m = parseInt(this.nextTime / 60 % 60);
+          var s = parseInt(this.nextTime % 60);
+
+          let str = ""
+          if (d > 0) {
+            str += d + "天 "
+          }
+          str += h < 10 ? "0" + h : h
+          str += ":"
+          str += m < 10 ? "0" + m : m
+          str += ":"
+          str += s < 10 ? "0" + s : s
+
+          return str
+        }
+
+      },
+
+      mounted() {
+        this.ABI = ABI
+        this.swapABI = swapABI;
+        this.LPABI = LPABI
+        let _this = this
+
+        this.connet()
+
+        ethereum.on('connect', function (event) {
+          _this.chainId = Number(event.chainId).toString()
+        });
+
+        // 监听账户切换
+        ethereum.on('accountsChanged', function (accounts) {
+          // Time to reload your interface with accounts[0]!
+          _this.currentAccount = accounts
+        });
+
+        // 监听链切换
+        ethereum.on('chainChanged', (chainId) => {
+          // Handle the new chain.
+          // Correctly handling chain changes can be complicated.
+          // We recommend reloading the page unless you have good reason not to.
+          window.location.reload();
+        });
+
+        // 断开小狐狸钱包事件
+        ethereum.on('disconnect', (event) => {
+          alert("小狐狸钱包断开")
+          console.log(event);
+        });
+
+        // 小狐狸钱包发出的消息
+        ethereum.on('message', (ProviderMessage) => {
+          //   interface ProviderMessage {
+          //   type: string;
+          //   data: unknown;
+          // }
+        });
+
+        // 小狐狸钱包抛出错误
+        ethereum.on('message', (ProviderRpcError) => {
+          /**
+             interface ProviderRpcError extends Error {
+               message: string;
+               code: number;
+               data?: unknown;
+             }
+            code
+             4001
+            请求被用户拒绝
+            -32602
+            参数无效
+            -32603
+            内部错误
+          */
+        });
+
+      },
+
+
+
+      methods: {
+        countDown(inputTime) {
+          //获取当前时间的时间戳（单位毫秒）
+          var nowTime = +new Date();
+          //把剩余时间毫秒数转化为秒
+          var times = (inputTime - nowTime) / 1000;
+          //计算小时数 转化为整数
+          var h = parseInt(times / 60 / 60 % 24);
+          //如果小时数小于 10，要变成 0 + 数字的形式 赋值给盒子
+          // hour.innerHTML = h < 10 ? "0" + h : h;
+          //计算分钟数 转化为整数
+          var m = parseInt(times / 60 % 60);
+          //如果分钟数小于 10，要变成 0 + 数字的形式 赋值给盒子
+          // minute.innerHTML = m < 10 ? "0" + m : m;
+          //计算描述 转化为整数
+          var s = parseInt(times % 60);
+          //如果秒钟数小于 10，要变成 0 + 数字的形式 赋值给盒子
+          // second.innerHTML = s < 10 ? "0" + s : s;
+
+          return `${h < 10 ? "0" + h : h}+${m < 10 ? "0" + m : m}+${s < 10 ? "0" + s : s}`
+        },
+        copy(t) {
+          var e = t; //要复制的内容
+          (e = "string" === typeof e ? e : e.toString()),
+            document.queryCommandSupported("copy") || alert("浏览器不支持");
+          var r = document.createElement("textarea");
+          (r.value = e),
+            (r.readOnly = "readOnly"),
+            document.body.appendChild(r),
+            r.select(),
+            r.setSelectionRange(0, e.length);
+          document.execCommand("copy");
+          r.remove(), console.log("复制成功~");
+        },
+
+        async searchLP() {
+          let contract = new ethers.Contract(this.LPAddress, this.LPABI, this.signer);
+
+
+        },
+        async test() {
+          //创建一个Provider
+          this.provider = new ethers.providers.Web3Provider(window.ethereum)
+
+          // const swapRoute = "0xB6BA90af76D139AB3170c7df0139636dB6120F7e"
+
+          // 获取主币余额
+          // let balance = ethers.utils.formatEther(await provider.getBalance(this.account));
+          // console.log("金额：", balance);
+          // let network = await provider.getNetwork();
+          // console.log("Chain Info;", network.chainId, network.name,);
+          // let gas = await provider.getGasPrice();
+          // console.log("当前燃料价格", gas);
+
+          this.signer = this.provider.getSigner();
+          this.contractObject = new ethers.Contract(this.contractAddr, this.ABI, this.signer);
+
+          // const a = await contract.callStatic.getFundInfo()
+          // console.log(a)
+
+          // console.log(contract.nextFundTime());
+
+          // setBoardMembers
+          // let a = await contract.showPairInfo("0x748da3D5EE4FE250569AFfa911E0eD063794cc54")
+
+
+          this.name = await this.contractObject._name()
+          this.totalSupply = await this.contractObject._tTotal()
+          this.decimals = await this.contractObject._decimals()
+
+          // let a = await contract.owner
+          this.allAccount = await this.contractObject.owner()
+
+          let a = await this.contractObject._tranferFee()
+          this.transferFee = this.oldTransferFee = Number(a._hex)
+          a = await this.contractObject._LPFee()
+          this.LPFee = this.oldLPFee = Number(a._hex)
+
+
+          a = await this.contractObject.getFundInfo()
+
+          this.oldHolderMin = Number(a[0]).toString()
+          this.oldOrdinaryMin = Number(a[1]).toString()
+          this.oldLimitMin = Number(a[2]).toString()
+          this.oldLimitGas = Number(a[3]).toString()
+          this.oldMinTime = Number(a[4]).toString()
+          this.oldCompRete = Number(a[5]).toString()
+
+
+        },
+
+        async contractControl(type) {
+          switch (type) {
+            case 0:
+              alert("此操作是放弃权限!!!")
+              await this.callContract("renounceOwnership", [])
+              break;
+            case 1:
+              await this.callContract("setOpenStatus", [this.isOpen])
+              break;
+            case 2:
+              await this.callContract("setBlackAddress", [this.blackAddress, this.isBlack])
+              break;
+            case 3:
+              await this.callContract("setfundAddress", [this.fundAddress])
+              break;
+            case 4:
+              await this.callContract("setFee", [this.transferFee, this.LPFee])
+              break;
+            case 5:
+              await this.callContract("setFeeWhiteList", [this.feeWhiteAddr, this.isFeeWhiteAddr])
+              break;
+            case 6:
+              await this.callContract("setBoardMembers", [this.boardAddr, this.isBoardAddr])
+              break;
+            case 7:
+              await this.callContract("setLPBlackList", [this.LPblackAddr, this.isLPblackAddr])
+              break;
+            case 8:
+              await this.callContract("setRecordBoardRate", [this.lockLPAddr, this.lockAddr, this.lockNum])
+              break;
+            case 9:
+              await this.callContract("setSwapPairList", [this.LPAddress, this.isLPAddress])
+              break;
+            case 10:
+              await this.callContract("depositFee", [this.depositFeeAddr])
+              break;
+            case 11:
+              await this.callContract("setHolderCondition", [this.oldHolderMin, this.oldOrdinaryMin, this.oldLimitGas, this.oldLimitMin, this.oldMinTime, this.oldCompRete])
+              break;
+            default:
+              break;
+          }
+        },
+        async callContract(fn, arg) {
+          console.log(...arg);
+          try {
+            await this.contractObject[fn](...arg)
+          } catch (err) {
+            if (err.code != 4001)
+              alert(err.data.message)
+          }
+        },
+        async searchLPInfo() {
+          this.LPInfo = await this.contractObject.showPairInfo(this.LPAddress)
+          // a[0]LP地址
+          // a[1]是否开启
+          // a[2]成员列表
+          // a[3]当前分红人员
+          // a[4]上一次分红总人数
+          // a[5]最新分红金额
+          // a[6]正在分红金额
+          // a[7]上次分红时间
+          console.log(this.LPInfo);
+
+
+          this.nextTime = Number(await this.contractObject.nextFundTime(this.LPAddress))
+          if (Number(this.oldMinTime) < this.nextTime) {
+            this.nextTime = 0
+            return
+          }
+
+          this.nextTime = this.oldMinTime - this.nextTime
+
+          clearInterval(this.timer)
+          this.timer = setInterval(() => {
+            if (this.nextTime == 0) {
+              calcNextTime = "准备触发"
+              clearInterval(this.timer)
+            }
+            this.nextTime--
+          }, 1000);
+        },
+        async searchNum() {
+          let a = await this.contractObject.showRecordBoardRate(this.lockLPAddr, this.lockAddr)
+          alert(ethers.utils.formatEther(a._hex))
+        },
+        async searchBlack() {
+          let a = await this.contractObject._blackList(this.blackAddress)
+          alert(a)
+        },
+        async searchfeeWhiteAddr() {
+          let a = await this.contractObject._feeWhiteList(this.feeWhiteAddr)
+          alert(a)
+        },
+        async searchboardAddr() {
+          let a = await this.contractObject._boardMembers(this.boardAddr)
+          alert(a)
+        },
+        async searchLPblackAddr() {
+          let a = await this.contractObject._lpBlackList(this.LPblackAddr)
+          alert(a)
+        },
+        amountInput() {
+          e.target.value = String(parseInt(e.target.value))
+          this.transferFee = e.target.value
+        },
+        transferInput(e) {
+          e.target.value = String(parseInt(e.target.value))
+          this.transferFee = e.target.value
+        },
+        LPFeeInput(e) {
+          e.target.value = String(parseInt(e.target.value))
+          this.LPFee = e.target.value
+        },
+        limitInput(e) {
+          console.log(e);
+          e.target.value = String(parseInt(e.target.value))
+          this.oldHolderMin = e.target.value
+        },
+        formatDate(time) {
+          let date = new Date(time * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+          let Year = date.getFullYear() + "年";
+          let Month = (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "月";
+
+          let D = format(date.getDate()) + '日 ';
+          let h = format(date.getHours()) + ":"; // 小时
+          let m = format(date.getMinutes()) + ":"; // 分钟
+          let s = format(date.getSeconds()); // 秒
+          return Year + Month + D + h + m + s;
+        },
+
+
+
+        // 链接按钮
+        async connet() {
+          // 获取当前链id
+          // const chainId = await ethereum.request({ method: 'eth_chainId' });
+          // 检测小狐狸钱包是否连接
+          // ethereum.isConnected()
+          if (typeof window.ethereum === 'undefined') {
+            alert("未检测到MetaMask!")
+            return
+          }
+          this.connetWallet()
+        },
+        // 链接账户
+        async connetWallet() {
+          this.currentAccount = await ethereum.request({ method: 'eth_requestAccounts' });
+          if (this.currentAccount.length) {
+            this.toggleAccout()
+          }
+          this.test()
+        },
+        // 切换账户
+        async toggleAccout() {
+          this.currentAccount = await ethereum.request({ method: 'eth_requestAccounts' });
+        },
+        // 切换链id
+        async toggleChain() {
+          // 切换网络,检测是否链id,没有就添加
+          try {
+            await ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: '0x38' }],
+            });
+          } catch (switchError) {
+            // This error code indicates that the chain has not been added to MetaMask.
+            if (switchError.code === 4902) {
+              try {
+                await ethereum.request({
+                  method: 'wallet_addEthereumChain',
+                  params: [
+                    {
+                      chainId: '0x38',
+                      chainName: 'BscTest',
+                      rpcUrls: ['https://endpoints.omniatech.io/v1/bsc/testnet/public'] /* ... */,
+                    },
+                  ],
+                });
+              } catch (addError) {
+                // handle "add" error
+              }
+            }
+            // handle other "switch" errors
+          }
+        },
+        // 添加token到钱包
+        async walletAddToken() {
+          ethereum
+            .request({
+              method: 'wallet_watchAsset',
+              params: {
+                type: 'ERC20',
+                options: {
+                  // contract address
+                  address: '0xB3c60Ce78f8fBDe1c1f4CD0025E90e665a4aEd3D',
+                  symbol: 'PlantI',
+                  decimals: 18,
+                  image: 'data:image/png;base64,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',
+                },
+              },
+            })
+            .then((success) => {
+              if (success) {
+                console.log('FOO successfully added to wallet!');
+                alert("添加成功", success)
+              } else {
+                throw new Error('Something went wrong.');
+              }
+            })
+            .catch(console.error);
+        },
+
+        // 发送
+        transfer() {
+          ethereum
+            .request({
+              method: 'eth_sendTransaction',
+              params: [
+                {
+                  from: this.account,
+                  to: '0x2f318C334780961FB129D2a6c30D0763d9a5C970',
+                  value: '0x29a2241af62c0000',
+                  gasPrice: '0x09184e72a000',
+                  gas: '0x2710',
+                },
+              ],
+            })
+            .then((txHash) => console.log(txHash))
+            .catch((error) => console.error);
+        },
+
+
+
+        // 调用摄像头
+        Camera() {
+          const video = document.querySelector('#video')
+          const back = document.querySelector('#output')
+          var backcontext = back.getContext('2d')
+          function draw() {
+            backcontext.drawImage(video, 0, 0, back.width, back.height)
+            try {
+              backcontext.drawImage(video, 0, 0, back.width, back.height)
+            } catch (e) {
+              if (e.name == "NS_ERROR_NOT_AVAILABLE") {
+                return setInterval(draw, 200)
+              } else {
+                throw e
+              }
+            }
+            setTimeout(draw, 200)
+          }
+          var success = function (stream) {
+            console.log('摄像头开启成功')
+            //videoUrl = window.URL.createObjectURL(stream)
+            //video.src = videoUrl
+            video.srcObject = stream
+            draw()
+          }
+          var error = (error) => {
+            alert('调用失败')
+          }
+          navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
+          navigator.getUserMedia({ video: true, audio: false }, success, error)
+        }
+
+      },
+
+    })
+
+
+  </script>
+</body>
+
+</html>
