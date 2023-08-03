@@ -442,6 +442,7 @@ contract AbsToken is IERC20, Ownable {
         // 分红账户
         IERC20 FIST = IERC20(address(this));
 
+        // gas小于当前限制, 每次循环都在历史总人数次数
         while (gasUsed < limitFeeMaxGas && iterations < shareholderCount) {
             // 循环完一遍了,重新循环分红
             if (pairObj.currentIndex >= shareholderCount) {

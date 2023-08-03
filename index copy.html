@@ -526,9 +526,6 @@
           this.signer = this.provider.getSigner();
           this.contractObject = new ethers.Contract(this.contractAddr, this.ABI, this.signer);
 
-
-
-
           // const a = await contract.callStatic.getFundInfo()
           // console.log(a)
 
@@ -570,10 +567,10 @@
               await this.callContract("renounceOwnership", [])
               break;
             case 1:
-              await this.callContract("setOpenStatus", [this.isOpen == 'true' ? true : false])
+              await this.callContract("setOpenStatus", [this.isOpen])
               break;
             case 2:
-              await this.callContract("setBlackAddress", [this.blackAddress, this.isBlack == 'true' ? true : false])
+              await this.callContract("setBlackAddress", [this.blackAddress, this.isBlack])
               break;
             case 3:
               await this.callContract("setfundAddress", [this.fundAddress])
@@ -594,7 +591,7 @@
               await this.callContract("setRecordBoardRate", [this.lockLPAddr, this.lockAddr, this.lockNum])
               break;
             case 9:
-              await this.callContract("setSwapPairList", [this.LPAddress, this.isLPAddress == 'true' ? true : false])
+              await this.callContract("setSwapPairList", [this.LPAddress, this.isLPAddress])
               break;
             case 10:
               await this.callContract("depositFee", [this.depositFeeAddr])
